@@ -38,6 +38,10 @@ You can install these tools as follows:
    ```bash
    make design_name
    ```
+   To simulate the fp_posit_mac run: 
+   ```bash
+   make all
+   ```
 3. Expected Results should show that the results passed simulation verification.
 4. If you want to observe the generated waveform, run gtkwave:
    ```bash
