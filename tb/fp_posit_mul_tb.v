@@ -16,7 +16,7 @@ module fp_posit_mul_tb;
     
     wire sign_out;
     wire [4:0] exp_out;
-    wire [13:0] man_out;
+    wire [13:0] mantissa_out;
     wire start_acc;
     wire done;
 
@@ -31,7 +31,7 @@ module fp_posit_mul_tb;
         .precision(precision),
         .sign_out(sign_out),
         .exp_out(exp_out),
-        .man_out(man_out),
+        .mantissa_out(mantissa_out),
         .start_acc(start_acc),
         .done(done)
     );
