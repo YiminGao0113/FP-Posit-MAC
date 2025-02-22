@@ -5,7 +5,7 @@
 This project implements a **FP16-POSIT4 MAC (Multiply-Accumulate) Unit** that computes MAC operations using **shift-and-add** in a **bit-serial fashion**. The unit is designed to efficiently perform mixed-precision arithmetic for machine learning and other hardware-accelerated applications.
 
 ### Key Features:
-- Supports **FP16** and **INT4** (or **POSIT4**) arithmetic.
+- Supports **FP16** and variable-precision **Posit** arithmetic.
 - Computes **MAC operations** using a shift-and-add technique.
 - **Bit-serial** implementation to reduce area and power consumption in hardware.
 - Verilog implementation for simulation and hardware integration.
