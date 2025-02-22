@@ -35,7 +35,6 @@ reg                   _regime;
 reg                   regime_next;
 reg                   regime_sign;
 reg [1:0] state;  // 2-bit state register
-reg [1:0] state_next;  // 2-bit state register
 
 // Define states
 localparam SIGN     = 2'b00;
@@ -52,7 +51,6 @@ always @(posedge clk or negedge rst) begin
         done        <= 0;
     end 
     else begin
-        // state       <= state_next;  // Update state
         if (valid) begin
             if (count<_precision-1) count <= count + 1;
             else count <= 0;
@@ -65,12 +63,9 @@ always @(*) begin
     case (count)
         4'b0000:  state = SIGN;
         4'b0001:  state = REGIME;
-        default:  begin
-            if (count < _precision-1)
-                if (regime_done) state = MANTISSA;
-                else state = REGIME;
-            else state = SIGN;
-        end
+        default:
+            if (regime_done) state = MANTISSA;
+            else state = REGIME;
     endcase
 end
 

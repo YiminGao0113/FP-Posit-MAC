@@ -64,7 +64,11 @@ module fp_posit_mul_tb;
         
         // Start simulation
         #10 valid = 1;
-        
+        #10 w = ~w;
+        #10 w = ~w;
+        #10 w = ~w;
+        #5 act = 16'hf234;
+        #5 w = ~w;
         // Change w each cycle
         repeat (10) begin
             #10 w = ~w;
