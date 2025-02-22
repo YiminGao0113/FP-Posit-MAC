@@ -49,8 +49,10 @@ You can install these tools as follows:
    ```
 
 ## To do
-- Finish the Accumulation module for Posit
-- Implement and verify the entire MAC operation
-- Implement and verify the bit-serial weight stream FP-POSIT MAC unit
-- Implement and verify the MAC unit for Posit4
+- Finish the Accumulation module for Posit (done✅)
+- Implement and verify the entire MAC operation (done✅)
+- Implement and verify the bit-serial weight stream FP-POSIT MAC unit (done✅)
+- Implement and verify the MAC unit for Posit4 (done✅)
 - Integrate synthesis flow into the Repo
+- Implement and verify the MAC units as PEs in a systolic array
+- Implement on FPGA with two shift-register based memory, one for weight and one for activation
