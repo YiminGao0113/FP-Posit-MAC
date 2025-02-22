@@ -21,7 +21,6 @@ module fp_posit_mul_tb;
     wire sign_out;
     wire [4:0] exp_out;
     wire [13:0] mantissa_out;
-    wire start_acc;
     wire done;
 
     // Instantiate the module under test
@@ -36,7 +35,6 @@ module fp_posit_mul_tb;
         .sign_out(sign_out),
         .exp_out(exp_out),
         .mantissa_out(mantissa_out),
-        .start_acc(start_acc),
         .done(done)
     );
 

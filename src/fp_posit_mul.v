@@ -13,7 +13,6 @@ module fp_posit_mul #(
     output reg              sign_out,
     output reg [4:0]        exp_out,
     output     [13:0]       mantissa_out,
-    output reg              start_acc,
     output reg              done
 );
 
@@ -51,7 +50,6 @@ always @(posedge clk or negedge rst) begin
         // state       <= SIGN;
         count       <= 0;
         regime_done <= 0;
-        start_acc   <= 0;
         done        <= 0;
         _act        <= 0;
     end 
@@ -60,6 +58,10 @@ always @(posedge clk or negedge rst) begin
             _act <= act;
             if (count<_precision-1) count <= count + 1;
             else count <= 0;
+        end
+        else begin
+            _act <= _act;
+            count <= 0;
         end
     end
 end
@@ -90,7 +92,6 @@ always @(posedge clk or negedge rst)
 // Output logic
 always @(posedge clk or negedge rst) begin
     if (!rst) begin
-        start_acc   <= 0;
         done        <= 0;
         regime_done <= 0;
         sign_out    <= 0;
@@ -131,7 +132,6 @@ always @(posedge clk or negedge rst) begin
             end 
         end
         else begin
-            start_acc   <= 0;
             done        <= 0;
         end
     end

@@ -16,6 +16,7 @@ module fp_posit_acc (
 wire [4:0] diff;
 assign diff = exp_in - exp_set;
 
+reg _sign_in;
 reg [31:0] fixed_point_reg;
 reg [4:0] exp_reg;
 reg [31:0] fixed_point_in_shifted;
@@ -25,12 +26,15 @@ always @(posedge clk or negedge rst)
     if (!rst) begin
         fixed_point_reg <= 0;
         done <= 0;
+        _sign_in <= 0;
     end
     else if (shifted&&!done) begin
-        fixed_point_reg <= sign_in? fixed_point_acc - fixed_point_in_shifted: fixed_point_acc + fixed_point_in_shifted;
+        _sign_in <= sign_in;
+        fixed_point_reg <= _sign_in? fixed_point_acc - fixed_point_in_shifted: fixed_point_acc + fixed_point_in_shifted;
         shifted <= 0;
         done <= 1;
     end
+    else _sign_in <= sign_in;
 
 always @(posedge clk or negedge rst) begin
     if (!rst) begin
