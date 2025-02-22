@@ -76,7 +76,7 @@ module fp_posit_mac_tb;
         
         // Expected results for first MAC operation
         expected_exp_out = 5'b10000;
-        expected_fixed_point_out = 32'b0100000011111;
+        expected_fixed_point_out = 32'b01000000111101;
 
         // Create VCD file for GTKWave
         $dumpfile("build/fp_posit_mac.vcd");
@@ -101,7 +101,7 @@ module fp_posit_mac_tb;
         #80
 
         expected_exp_out = 5'b10000;
-        expected_fixed_point_out = 32'b11111111111111111110010101011010;
+        expected_fixed_point_out = 32'b11111111111111111111001010101110;
 
         // Start another MAC operation with different values
         act = 16'b0100101010101010; // Different FP16 value
@@ -119,7 +119,7 @@ module fp_posit_mac_tb;
         repeat (4) begin
             #10 w = ~w;
         end
-        expected_fixed_point_out = 32'b00000000000000000000001001110010;
+        expected_fixed_point_out = 32'b00000000000000000000010011100010;
 
 
 

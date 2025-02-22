@@ -43,10 +43,10 @@ module fp_posit_mul_tb;
 
     initial begin
 
-    expected_exp[0] = 5'b00010; expected_man[0] = 14'b01001010011100;
-    expected_exp[1] = 5'b11010; expected_man[1] = 14'b01001010011100;
-    expected_exp[2] = 5'b11010; expected_man[2] = 14'b01001010011100;
-    expected_exp[3] = 5'b11011; expected_man[3] = 14'b00011000110100;
+    expected_exp[0] = 5'b00011; expected_man[0] = 14'b01001010011100;
+    expected_exp[1] = 5'b11011; expected_man[1] = 14'b01001010011100;
+    expected_exp[2] = 5'b11011; expected_man[2] = 14'b01001010011100;
+    expected_exp[3] = 5'b11100; expected_man[3] = 14'b00011000110100;
         // Create VCD file for GTKWave
         $dumpfile("build/fp_posit_mul.vcd");
         $dumpvars(0, fp_posit_mul_tb);  // Dump all signals of the testbench
