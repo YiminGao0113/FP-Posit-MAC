@@ -14,6 +14,10 @@ module fp_posit_mul_tb;
     reg set;
     reg [3:0] precision;
     
+    // Expected values for verification (Modify these based on expected behavior)
+    reg [4:0] expected_exp [0:3];
+    reg [13:0] expected_man [0:3];
+    
     wire sign_out;
     wire [4:0] exp_out;
     wire [13:0] mantissa_out;
@@ -40,6 +44,11 @@ module fp_posit_mul_tb;
     always #5 clk = ~clk;
 
     initial begin
+
+    expected_exp[0] = 5'b00010; expected_man[0] = 14'b01001010011100;
+    expected_exp[1] = 5'b11010; expected_man[1] = 14'b01001010011100;
+    expected_exp[2] = 5'b11010; expected_man[2] = 14'b01001010011100;
+    expected_exp[3] = 5'b11011; expected_man[3] = 14'b00011000110100;
         // Create VCD file for GTKWave
         $dumpfile("build/fp_posit_mul.vcd");
         $dumpvars(0, fp_posit_mul_tb);  // Dump all signals of the testbench
@@ -76,6 +85,24 @@ module fp_posit_mul_tb;
         
         // End simulation
         #50 $finish;
+    end
+
+    // Expected values for verification (modify as necessary)
+    // reg [4:0] expected_exp = 5'b10101; // Example expected exponent
+    // reg [13:0] expected_man = 14'b11001100110011; // Example expected mantissa
+
+    integer index = 0;
+    // Monitor outputs when done = 1 and compare with expected values
+    always @(posedge clk) begin
+        if (done) begin
+            $display("Time: %0t | Exp Out: %b | Mantissa Out: %b", $time, exp_out, mantissa_out);
+            if (exp_out !== expected_exp[index] || mantissa_out !== expected_man[index]) begin
+                $display("Mismatch detected! Expected Exp: %b, Expected Mantissa: %b", expected_exp[index], expected_man[index]);
+            end else begin
+                $display("Output matches expected values.");
+            end
+            index = index + 1;
+        end
     end
 
 endmodule

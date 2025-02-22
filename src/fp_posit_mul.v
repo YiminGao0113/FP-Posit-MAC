@@ -80,7 +80,7 @@ always @(posedge clk or negedge rst)
         mantissa_reg <= 0;
         mantissa_temp <= 0;
     end
-    else if (state == REGIME) mantissa_reg <= act_mantissa;
+    else if (state == REGIME) mantissa_reg <= fixed_mantissa;
     else if (state == MANTISSA && count<_precision-1) mantissa_reg <= mantissa_out;
     else begin
         mantissa_reg<=0;
