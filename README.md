@@ -57,6 +57,7 @@ You can install these tools as follows:
 - Implement and verify the entire MAC operation (done✅)
 - Implement and verify the bit-serial weight stream FP-POSIT MAC unit (done✅)
 - Implement and verify the MAC unit for Posit4 (done✅)
+- Add zero detection logic and verify it in the tb
 - Integrate synthesis flow into the Repo
 - Implement and verify the MAC units as PEs in a systolic array
 - Implement on FPGA with two shift-register based memory, one for weight and one for activation

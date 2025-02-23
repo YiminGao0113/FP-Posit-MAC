@@ -80,7 +80,11 @@ module fp_posit_mul_tb;
         repeat (10) begin
             #10 w = ~w;
         end
-        
+        #10 valid = 0;
+        #30 valid = 1;
+        #10 w = 0;
+        #40 w = 1;
+        #10 w = 0;
         // End simulation
         #50 $finish;
     end

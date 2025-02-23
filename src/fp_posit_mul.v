@@ -16,6 +16,8 @@ module fp_posit_mul #(
     output reg              done
 );
 
+reg                       zero;
+reg                       NaR;
 reg [ACT_WIDTH-1:0]       _act;
 wire                      act_sign;
 wire [4:0]                act_exponent;
@@ -98,15 +100,21 @@ always @(posedge clk or negedge rst) begin
         exp_out     <= 0;
         shifted_fp  <= 0;
         _regime     <= 0;
+        zero        <= 0;
+        NaR         <= 0;
     end 
     else if (valid) begin
         if (state == SIGN) begin
             sign_out <= act[ACT_WIDTH-1] ^ w;
             done <= 0;
             regime_done <= 0;
+            zero <= ~w;
+            NaR <= w;
         end
         if (state == REGIME) begin
             _regime <= w;
+            zero <= zero & !w;
+            NaR <= NaR & !w;
             if (count == 1) regime_sign <= w; // positive if 1, negative if 0
             else if (_regime^w) begin
                 regime_done <= 1;
@@ -117,6 +125,8 @@ always @(posedge clk or negedge rst) begin
             end
         end
         if (state == MANTISSA) begin
+            zero <= 0;
+            NaR <= 0;
             if (regime_done) begin 
                 regime_done <= 0;
                 exp_out <= w? (regime_sign? act_exponent +count - 4 : act_exponent + 1 - count)
