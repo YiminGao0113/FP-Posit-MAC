@@ -13,7 +13,9 @@ module fp_posit_mul #(
     output reg              sign_out,
     output reg [4:0]        exp_out,
     output     [13:0]       mantissa_out,
-    output reg              done
+    output reg              done,
+    output                  zero_out,
+    output                  NaR_out
 );
 
 reg                       zero;
@@ -59,7 +61,10 @@ always @(posedge clk or negedge rst) begin
         if (valid) begin
             _act <= act;
             if (count<_precision-1) count <= count + 1;
-            else count <= 0;
+            else begin
+                count <= 0;
+                done <= 1;
+            end
         end
         else begin
             _act <= _act;
@@ -120,7 +125,7 @@ always @(posedge clk or negedge rst) begin
                 regime_done <= 1;
             end
             if (count == _precision-1) begin
-                exp_out <= regime_sign? act_exponent-count: act_exponent; 
+                exp_out <= regime_sign? act_exponent+count: act_exponent; 
                 done <= 1;
             end
         end
@@ -142,12 +147,14 @@ always @(posedge clk or negedge rst) begin
             end 
         end
         else begin
-            done        <= 0;
+            // done        <= 0;
         end
     end
 end
 
 fixed_point_adder fixed_adder(done?mantissa_temp:mantissa_reg, shifted_fp, mantissa_out);
+assign zero_out = done&zero;
+assign NaR_out  = done&NaR;
 
 endmodule
 

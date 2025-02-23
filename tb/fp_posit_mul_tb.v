@@ -15,13 +15,16 @@ module fp_posit_mul_tb;
     reg [3:0] precision;
     
     // Expected values for verification (Modify these based on expected behavior)
-    reg [4:0] expected_exp [0:3];
-    reg [13:0] expected_man [0:3];
+    reg [4:0] expected_exp [0:4];
+    reg [13:0] expected_man [0:4];
+    reg expected_zero [0:4];
+    reg expected_nar [0:4];
     
     wire sign_out;
     wire [4:0] exp_out;
     wire [13:0] mantissa_out;
     wire done;
+    wire zero, NaR;
 
     // Instantiate the module under test
     fp_posit_mul #(ACT_WIDTH, EXP_WIDTH, MAN_WIDTH) uut (
@@ -35,7 +38,9 @@ module fp_posit_mul_tb;
         .sign_out(sign_out),
         .exp_out(exp_out),
         .mantissa_out(mantissa_out),
-        .done(done)
+        .done(done),
+        .zero_out(zero),
+        .NaR_out(NaR)
     );
 
     // Clock generation
@@ -43,10 +48,11 @@ module fp_posit_mul_tb;
 
     initial begin
 
-    expected_exp[0] = 5'b00011; expected_man[0] = 14'b01001010011100;
-    expected_exp[1] = 5'b11011; expected_man[1] = 14'b01001010011100;
-    expected_exp[2] = 5'b11011; expected_man[2] = 14'b01001010011100;
-    expected_exp[3] = 5'b11100; expected_man[3] = 14'b00011000110100;
+    expected_exp[0] = 5'b00011; expected_man[0] = 14'b01001010011100; expected_zero[0] = 0; expected_nar[0] = 0;
+    expected_exp[1] = 5'b11011; expected_man[1] = 14'b01001010011100; expected_zero[1] = 0; expected_nar[1] = 0;
+    expected_exp[2] = 5'b11011; expected_man[2] = 14'b01001010011100; expected_zero[2] = 0; expected_nar[2] = 0;
+    expected_exp[3] = 5'b11100; expected_man[3] = 14'b00110001101000; expected_zero[3] = 1; expected_nar[3] = 0;// man and exp doesn't matter as long as zero = 1
+    expected_exp[4] = 5'b11100; expected_man[4] = 14'b01001010011100; expected_zero[4] = 0; expected_nar[4] = 1;// man and exp doesn't matter as long as NaR = 1
         // Create VCD file for GTKWave
         $dumpfile("build/fp_posit_mul.vcd");
         $dumpvars(0, fp_posit_mul_tb);  // Dump all signals of the testbench
@@ -83,7 +89,7 @@ module fp_posit_mul_tb;
         #10 valid = 0;
         #30 valid = 1;
         #10 w = 0;
-        #40 w = 1;
+        #35 w = 1;
         #10 w = 0;
         // End simulation
         #50 $finish;
@@ -97,9 +103,9 @@ module fp_posit_mul_tb;
     // Monitor outputs when done = 1 and compare with expected values
     always @(posedge clk) begin
         if (done) begin
-            $display("Time: %0t | Exp Out: %b | Mantissa Out: %b", $time, exp_out, mantissa_out);
-            if (exp_out !== expected_exp[index] || mantissa_out !== expected_man[index]) begin
-                $display("Mismatch detected! Expected Exp: %b, Expected Mantissa: %b", expected_exp[index], expected_man[index]);
+            $display("Time: %0t | Exp Out: %b | Mantissa Out: %b | Zero: %b | NaR: %b", $time, exp_out, mantissa_out, zero, NaR);
+            if (exp_out !== expected_exp[index] || mantissa_out !== expected_man[index] || zero !== expected_zero[index] || NaR !== expected_nar[index]) begin
+                $display("Mismatch detected! Expected Exp: %b, Expected Mantissa: %b, Expected Zero: %b, Expected NaR: %b", expected_exp[index], expected_man[index], expected_zero[index], expected_nar[index]);
             end else begin
                 $display("Output matches expected values.");
             end
