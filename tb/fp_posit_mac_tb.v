@@ -124,7 +124,9 @@ module fp_posit_mac_tb;
 
 
         #10 valid = 0;
-
+        #10 valid = 1;
+        w = 0;
+        expected_fixed_point_out = 32'b10;
         #80
 
         // End simulation

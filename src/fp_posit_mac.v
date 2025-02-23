@@ -13,7 +13,8 @@ module fp_posit_mac #(
     input [31:0]            fixed_point_acc,
     output [4:0]            exp_out,
     output [ACC_WIDTH-1:0]  fixed_point_out,
-    output                  done
+    output                  done,
+    output                  NaR_out
 );
 
 // Intermediate signals between Multiplier and Accumulator
@@ -21,6 +22,8 @@ wire                    start_acc;
 wire                    sign_out;
 wire [4:0]              exp_out_mul;
 wire [13:0]             mantissa_out;
+wire                    zero;
+wire                    NaR;
 
 // Accumulator signals
 reg [4:0]               exp_min_reg;
@@ -40,7 +43,9 @@ fp_posit_mul #(
     .sign_out(sign_out),
     .exp_out(exp_out_mul),
     .mantissa_out(mantissa_out),
-    .done(start_acc)
+    .done(start_acc),
+    .zero_out(zero),
+    .NaR_out(NaR)
 );
 
 // Instantiate the Accumulator Unit
@@ -53,9 +58,12 @@ fp_posit_acc acc_unit (
     .fixed_point_acc(fixed_point_acc),
     .exp_in(exp_out_mul),
     .fixed_point_in(mantissa_out),
+    .zero(zero),
+    .NaR(NaR),
     .exp_out(exp_out),
     .fixed_point_out(fixed_point_out),
-    .done(done)
+    .done(done),
+    .NaR_out(NaR_out)
 );
 
 endmodule

@@ -5,6 +5,8 @@ module fp_posit_acc_tb;
     reg rst;
     reg start;
     reg sign_in;
+    reg zero;
+    reg NaR;
     reg [4:0] exp_min;
     reg [31:0] fixed_point_acc;
     reg [4:0] exp_in;
@@ -26,6 +28,8 @@ module fp_posit_acc_tb;
         .fixed_point_acc(fixed_point_acc),
         .exp_in(exp_in),
         .fixed_point_in(fixed_point_in),
+        .zero(zero),
+        .NaR(NaR),
         .exp_out(exp_out),
         .fixed_point_out(fixed_point_out)
     );
@@ -41,6 +45,8 @@ module fp_posit_acc_tb;
         clk = 0;
         rst = 1;
         start = 0;
+        zero = 0;
+        NaR = 0;
         sign_in = 0;  // Add to the test if it's add or subtract
         exp_min = 5'b10000;  // Exponent Min = 16
         fixed_point_acc = 32'b00000000000000000000000000000001;  // Initialize accumulator to 0
@@ -86,6 +92,13 @@ module fp_posit_acc_tb;
             $display("ERROR: sign_out is incorrect. Expected %b, got %b", expected_sign_out, sign_in);
         else 
             $display("sign_out is correct.");
+
+        // zero = 1;
+        NaR = 1;
+        #15 start = 1;  // Start operation
+        #10 start = 0;  // End start pulse
+        // Wait for the operation to complete
+        #40; // Wait a few cycles for computation to finish
 
         // Finish the simulation
         $finish;
