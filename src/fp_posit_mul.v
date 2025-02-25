@@ -27,7 +27,7 @@ wire [9:0]                act_mantissa;
 wire [10:0]               fixed_mantissa;
 reg  [13:0] mantissa_reg, mantissa_temp;
 reg   [13:0] shifted_fp;
-assign {act_sign, act_exponent, act_mantissa} = _act;
+assign {act_sign, act_exponent, act_mantissa} = act;
 assign fixed_mantissa = {1'b1, act_mantissa};
 
 reg [3:0]             _precision;
@@ -55,11 +55,11 @@ always @(posedge clk or negedge rst) begin
         count       <= 0;
         regime_done <= 0;
         done        <= 0;
-        _act        <= 0;
+        // _act        <= 0;
     end 
     else begin
         if (valid) begin
-            _act <= act;
+            // _act <= act;
             if (count<_precision-1) count <= count + 1;
             else begin
                 count <= 0;
@@ -67,7 +67,7 @@ always @(posedge clk or negedge rst) begin
             end
         end
         else begin
-            _act <= _act;
+            // _act <= _act;
             count <= 0;
         end
     end
