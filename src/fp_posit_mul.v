@@ -107,6 +107,7 @@ always @(posedge clk or negedge rst) begin
         _regime     <= 0;
         zero        <= 0;
         NaR         <= 0;
+        regime_sign <= 1;
     end 
     else if (valid) begin
         if (state == SIGN) begin
@@ -115,6 +116,7 @@ always @(posedge clk or negedge rst) begin
             regime_done <= 0;
             zero <= ~w;
             NaR <= w;
+            exp_out <= act_exponent;
         end
         if (state == REGIME) begin
             _regime <= w;
@@ -125,7 +127,7 @@ always @(posedge clk or negedge rst) begin
                 regime_done <= 1;
             end
             if (count == _precision-1) begin
-                exp_out <= regime_sign? act_exponent+count: act_exponent; 
+                exp_out <= regime_sign? exp_out+count: exp_out; 
                 done <= 1;
             end
         end
@@ -134,8 +136,8 @@ always @(posedge clk or negedge rst) begin
             NaR <= 0;
             if (regime_done) begin 
                 regime_done <= 0;
-                exp_out <= w? (regime_sign? act_exponent +count - 4 : act_exponent + 1 - count)
-                             :(regime_sign? act_exponent +count - 3 : act_exponent + 2 - count); 
+                exp_out <= w? (regime_sign? exp_out +count - 4 : exp_out + 1 - count)
+                             :(regime_sign? exp_out +count - 3 : exp_out + 2 - count); 
                 shifted_fp <= w? fixed_mantissa<<1 : 0;
             end
             else begin
